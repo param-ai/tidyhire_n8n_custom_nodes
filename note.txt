@@ -3,7 +3,7 @@ nvm use 18 && pnpm run build && pnpm link && npx n8n
 
 
 # Install/Update n8n custom node
-cd n8n-docker-caddy && docker-compose down && cd custom-nodes && git pull && rm dist -r && npm run build && cd .. && docker-compose up -d && cd ..
+cd n8n-docker-caddy && cd custom-nodes && git pull && rm dist -r && npm run build &&  cd .. && docker-compose down && docker-compose up -d && cd ..
 
 # Update self-hosted n8n
-cd n8n-docker-caddy && docker-compose down && docker-compose pull && docker-compose up -d
+cd n8n-docker-caddy && docker-compose pull && docker-compose down && docker-compose up -d
