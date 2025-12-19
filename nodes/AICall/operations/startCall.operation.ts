@@ -7,13 +7,15 @@ import {
 import { projectProperties } from '../../common.descriptions';
 
 /* -------------------------------------------------------------------------- */
-/*                                tidyhire:moveCandidatesToSpecificStage                             */
+/*                                AI Call: Start Call                          */
 /* -------------------------------------------------------------------------- */
-import settingsOptions from '../settingsOptions.json';
+// TODO: Re-enable when Assistant Settings UI is restored
+// import settingsOptions from '../settingsOptions.json';
 import { apiRequest } from '../../apiRequest';
 
 const properties: INodeProperties[] = [
-	...projectProperties,
+	// Spread projectProperties and override to make project required for this operation
+	...projectProperties.map(prop => prop.name === 'project' ? { ...prop, required: true } : prop),
 	{
 		displayName: 'Candidate',
 		name: 'candidate',
@@ -107,98 +109,6 @@ const properties: INodeProperties[] = [
 	// 		},
 	// 	],
 	// },
-	{
-		displayName: 'Assistant Settings',
-		name: 'assistantSettings',
-		type: 'collection',
-		placeholder: 'Add option',
-		default: {},
-		options: [
-			{
-				displayName: 'Gender',
-				name: 'gender',
-				type: 'options',
-				options: settingsOptions.gender.map((each) => ({
-					name: each,
-					value: each,
-				})),
-				default: '',
-			},
-			{
-				displayName: 'Language',
-				name: 'language',
-				type: 'options',
-				options: settingsOptions.language.map((each) => ({
-					name: each.language,
-					value: each.code,
-				})),
-				default: '',
-			},
-			{
-				displayName: 'Language Provider Name or ID',
-				name: 'languageProvider',
-				type: 'options',
-				description:
-					'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
-				typeOptions: {
-					loadOptionsMethod: 'getLanguageProviders',
-					loadOptionsDependsOn: ['assistantSettings.language'],
-				},
-				default: '',
-			},
-			{
-				displayName: 'LLM',
-				name: 'llm',
-				type: 'options',
-				options: settingsOptions.llmModel.map((each) => ({
-					name: each.label,
-					value: JSON.stringify({ provider:each.provider, model: each.value }),
-					description: each.provider,
-				})),
-				default: '',
-				noDataExpression: true,
-			},
-			{
-				displayName: 'LLM Temperature',
-				name: 'llmTemperature',
-				type: 'number',
-				default: 0.7,
-			},
-			{
-				displayName: 'Ambience Sound Effect',
-				name: 'effect',
-				type: 'options',
-				options: settingsOptions.effect.map((each) => ({
-					name: each,
-					value: each,
-				})),
-				default: '',
-			},
-			{
-				displayName: 'Effect Volume',
-				name: 'effectVolume',
-				type: 'number',
-				default: 0.3,
-			},
-			{
-				displayName: 'Voice',
-				name: 'tts',
-				type: 'options',
-				typeOptions: {
-					loadOptionsMethod: 'getVoices',
-					loadOptionsDependsOn: ['assistantSettings.language', 'assistantSettings.gender'],
-				},
-				default: '',
-				noDataExpression: true,
-			},
-			{
-				displayName: 'Voice Speed',
-				name: 'voiceSpeed',
-				type: 'number',
-				default: -0.3,
-			},
-		],
-	},
 	{
 		displayName: 'Call Settings',
 		name: 'callSettings',
@@ -322,6 +232,134 @@ const properties: INodeProperties[] = [
 			},
 		],
 	},
+	// TODO: Replace JSON input with proper UI controls for assistant settings
+	// {
+	// 	displayName: 'Assistant Settings',
+	// 	name: 'assistantSettings',
+	// 	type: 'collection',
+	// 	placeholder: 'Add option',
+	// 	default: {},
+	// 	options: [
+	// 		{
+	// 			displayName: 'Gender',
+	// 			name: 'gender',
+	// 			type: 'options',
+	// 			options: settingsOptions.gender.map((each) => ({
+	// 				name: each,
+	// 				value: each,
+	// 			})),
+	// 			default: '',
+	// 		},
+	// 		{
+	// 			displayName: 'Language',
+	// 			name: 'language',
+	// 			type: 'options',
+	// 			options: settingsOptions.language.map((each) => ({
+	// 				name: each.language,
+	// 				value: each.code,
+	// 			})),
+	// 			default: '',
+	// 		},
+	// 		{
+	// 			displayName: 'Language Provider Name or ID',
+	// 			name: 'languageProvider',
+	// 			type: 'options',
+	// 			description:
+	// 				'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+	// 			typeOptions: {
+	// 				loadOptionsMethod: 'getLanguageProviders',
+	// 				loadOptionsDependsOn: ['assistantSettings.language'],
+	// 			},
+	// 			default: '',
+	// 		},
+	// 		{
+	// 			displayName: 'LLM',
+	// 			name: 'llm',
+	// 			type: 'options',
+	// 			options: settingsOptions.llmModel.map((each) => ({
+	// 				name: each.label,
+	// 				value: JSON.stringify({ provider:each.provider, model: each.value }),
+	// 				description: each.provider,
+	// 			})),
+	// 			default: '',
+	// 			noDataExpression: true,
+	// 		},
+	// 		{
+	// 			displayName: 'LLM Temperature',
+	// 			name: 'llmTemperature',
+	// 			type: 'number',
+	// 			default: 0.7,
+	// 		},
+	// 		{
+	// 			displayName: 'Ambience Sound Effect',
+	// 			name: 'effect',
+	// 			type: 'options',
+	// 			options: settingsOptions.effect.map((each) => ({
+	// 				name: each,
+	// 				value: each,
+	// 			})),
+	// 			default: '',
+	// 		},
+	// 		{
+	// 			displayName: 'Effect Volume',
+	// 			name: 'effectVolume',
+	// 			type: 'number',
+	// 			default: 0.3,
+	// 		},
+	// 		{
+	// 			displayName: 'Voice',
+	// 			name: 'tts',
+	// 			type: 'options',
+	// 			typeOptions: {
+	// 				loadOptionsMethod: 'getVoices',
+	// 				loadOptionsDependsOn: ['assistantSettings.language', 'assistantSettings.gender'],
+	// 			},
+	// 			default: '',
+	// 			noDataExpression: true,
+	// 		},
+	// 		{
+	// 			displayName: 'Voice Speed',
+	// 			name: 'voiceSpeed',
+	// 			type: 'number',
+	// 			default: -0.3,
+	// 		},
+	// 	],
+	// },
+	{
+		displayName: 'Assistant Settings (JSON)',
+		name: 'assistantSettingsJson',
+		type: 'json',
+		default: JSON.stringify({
+			gender: 'Female',
+			language: {
+				code: 'en',
+				provider: 'deepgram',
+				label: 'English',
+			},
+			llm: {
+				provider: 'openai',
+				model: 'gpt-4.1-mini',
+				temperature: 0.7,
+			},
+			effect: {
+				name: 'none',
+				volume: 0.3,
+			},
+			tts: {
+				provider: 'cartesia',
+				id: '3b554273-4299-48b9-9aaf-eefd438e3941',
+				model: 'sonic-3',
+				speed: -0.3,
+				name: 'Simi - Support Specialist',
+				gender: 'Female',
+				language: 'en',
+			},
+			tools: ['detected_answering_machine', 'end_call'],
+			min_endpointing_delay: 0.5,
+			max_endpointing_delay: 6,
+		}, null, 2),
+		description: 'Assistant settings as JSON. Modify the default values as needed.',
+	},
 	{
 		displayName: 'Post Call Analysis',
 		name: 'postCallAnalysis',
@@ -393,11 +431,6 @@ const properties: INodeProperties[] = [
 								name: 'format_example',
 								type: 'string',
 								default: '',
-								displayOptions: {
-									show: {
-										type: ['text', 'number', 'array'],
-									},
-								},
 							},
 							{
 								displayName: 'Choices',
@@ -432,12 +465,6 @@ const properties: INodeProperties[] = [
 					},
 				],
 			},
-			{
-				displayName: 'Post Call Summary',
-				name: 'summaryPlan',
-				type: 'string',
-				default: '',
-			},
 		],
 	},
 ];
@@ -465,9 +492,19 @@ export async function execute(this: IExecuteFunctions): Promise<INodeExecutionDa
 		const phone = this.getNodeParameter('candidatePhoneNumber', 0, '', { extractValue: true });
 		const instructions = this.getNodeParameter('instructions', 0, '') as string;
 		const first_message = this.getNodeParameter('firstMessage', 0, '') as string;
-		const assistantSettings = this.getNodeParameter('assistantSettings', 0, {}) as any;
+		const assistantSettingsJson = this.getNodeParameter('assistantSettingsJson', 0, '{}') as string;
 		const callSettings = this.getNodeParameter('callSettings', 0, {}) as any;
 		const postCallAnalysis = this.getNodeParameter('postCallAnalysis', 0, {}) as any;
+
+		// Parse assistant settings from JSON input
+		let assistantSettings: any;
+		try {
+			assistantSettings = typeof assistantSettingsJson === 'string'
+				? JSON.parse(assistantSettingsJson)
+				: assistantSettingsJson;
+		} catch (e) {
+			throw new NodeOperationError(this.getNode(), 'Invalid JSON in Assistant Settings');
+		}
 
 		let retry_intervals = [];
 
@@ -477,7 +514,7 @@ export async function execute(this: IExecuteFunctions): Promise<INodeExecutionDa
 				const interval: any = { type: r.type };
 				if (r.type === 'delay') {
 					interval.unit = r.unit;
-					interval.amount = r.amount;
+					interval.duration = r.amount;
 				} else if (r.type === 'specific_datetime') {
 					interval.dateTime = r.dateTime;
 				}
@@ -490,63 +527,34 @@ export async function execute(this: IExecuteFunctions): Promise<INodeExecutionDa
 		// Post-Call Analysis: Structured Data Plan
 		if (postCallAnalysis.structuredDataPlan?.values?.length) {
 			structured_data_plan = postCallAnalysis.structuredDataPlan.values.map((item: any) => {
-				const structured = {
-					type: item.type,
+				const structured: any = {
 					label: item.label,
+					type: item.type,
 					description: item.description,
-				} as any;
-
-				if (['text', 'number', 'array'].includes(item.type)) {
-					structured.format_example = item.format_example;
-				}
-
-				if (item.type === 'single_select' && item.choices?.items?.length) {
-					structured.choices = item.choices?.items?.length
+					format_example: item.format_example || '',
+					choices: item.type === 'single_select' && item.choices?.items?.length
 						? item.choices.items.map((c: any) => c.choice)
-						: [];
-				}
+						: [],
+				};
 
 				return structured;
 			});
 		}
 
-		let llm=assistantSettings.llm
-		let tts=assistantSettings.tts
-
-
-		if(llm){
-			llm=JSON.parse(llm);
-		}
-
-		if(tts){
-			tts=JSON.parse(tts);
-		}
 		const payload: Record<string, any> = {
 			to: [{ id: candidate, phone: phone }],
 			project_id: project,
 			instructions: instructions,
 			first_message: first_message,
-			summary_plan: postCallAnalysis.summaryPlan,
-			structured_data_plan: structured_data_plan,
-			assistant_settings: {
-				gender:assistantSettings.gender,
-				language:{
-					code: assistantSettings.language,
-					provider: assistantSettings.languageProvider,
-				},
-				llm:{
-				...llm,
-					temperature:assistantSettings.llmTemperature,
-				},
-				tts:{
-					...tts,
-					speed:assistantSettings.voiceSpeed,
-				}
+			post_analysis_settings: {
+				summary_plan: '',
+				structured_data_plan: structured_data_plan || [],
 			},
+			assistant_settings: assistantSettings,
 			call_settings: {
 				retry_policy: {
 					intervals: retry_intervals,
-					Conditions: callSettings?.retryConditions || [],
+					conditions: callSettings?.retryConditions || [],
 				},
 				whatsapp_notifications: {
 					missed: {
