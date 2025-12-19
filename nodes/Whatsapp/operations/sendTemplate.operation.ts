@@ -176,7 +176,6 @@ export async function execute(this: IExecuteFunctions): Promise<INodeExecutionDa
 
 
 			body.template_variables = inputData;
-			console.log(body.template_variables);
 		}
 
 		const responseData = await apiRequest.call(

@@ -60,7 +60,7 @@ export class TidyhireApi implements ICredentialType {
 				'" : "' +
 				TIDYHIRE_BASE_API_STAGING_URL +
 				'" }}',
-			url: '/test-api-key',
+			url: '/auth/test-api-key',
 			json: true,
 			ignoreHttpStatusErrors: true,
 		},

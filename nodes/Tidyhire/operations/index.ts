@@ -6,6 +6,7 @@ import * as moveCandidatesToSpecificStage from './moveCandidatesToSpecificStage.
 import * as setCustomFieldsInCandidates from './setCustomFieldsInCandidates.operation';
 import * as getCandidateDetails from './getCandidateDetails.operation';
 import * as getProjectDetails from './getProjectDetails.operation';
+import * as addCandidates from './addCandidates.operation';
 
 export {
 	getCandidatesByStage,
@@ -13,6 +14,7 @@ export {
 	setCustomFieldsInCandidates,
 	getCandidateDetails,
 	getProjectDetails,
+	addCandidates,
 };
 
 export const description: INodeProperties[] = [
@@ -47,6 +49,11 @@ export const description: INodeProperties[] = [
 				value: 'setCustomFieldsInCandidates',
 				action: 'Set custom fields in candidates',
 			},
+			{
+				name: 'Add candidates to project',
+				value: 'addCandidates',
+				action: 'Add candidates to project',
+			},
 		],
 		default: 'getCandidatesByStage',
 	},
@@ -55,4 +62,5 @@ export const description: INodeProperties[] = [
 	...setCustomFieldsInCandidates.description,
 	...getCandidateDetails.description,
 	...getProjectDetails.description,
+	...addCandidates.description,
 ];
