@@ -18,7 +18,7 @@ export const webhookMethods = {
 		}
 
 		try {
-			await apiRequest.call(this, 'GET', '/api/workflow/webhook/get/' + webhookData.webhookId);
+			await apiRequest.call(this, 'GET', `/api/workspace/n8n-webhooks/${webhookData.webhookId}`);
 		} catch (error) {
 			if (error.httpCode === '404') {
 				// Webhook does not exist
@@ -47,18 +47,18 @@ export const webhookMethods = {
 		}) as string;
 
 		const body = {
+			name:`tidyhire-workflow-${this.getNode().id}`,
 			url: webhookUrl,
 			events: events,
-			workflow_id: this.getWorkflow().id,
 			project: project,
 		};
 
-		const { data } = await apiRequest.call(this, 'POST', '/api/workflow/webhook/create', body);
+		const { data } = await apiRequest.call(this, 'POST', '/api/workspace/n8n-webhooks/create', body);
 
 		if (!data) {
 			// Required data is missing so was not successful
 			throw new NodeApiError(this.getNode(), data as JsonObject, {
-				message: 'Whatsapp webhook creation response did not contain the expected data.',
+				message: 'Webhook creation response did not contain the expected data.',
 			});
 		}
 
@@ -78,7 +78,7 @@ export const webhookMethods = {
 				await apiRequest.call(
 					this,
 					'POST',
-					'/api/workflow/webhook/delete/' + webhookData.webhookId,
+					`/api/workspace/n8n-webhooks/${webhookData.webhookId}/delete`,
 					body,
 				);
 			} catch (error) {
