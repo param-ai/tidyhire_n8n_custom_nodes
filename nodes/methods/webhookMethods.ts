@@ -51,6 +51,7 @@ export const webhookMethods = {
 			url: webhookUrl,
 			events: events,
 			project: project,
+			upsert :true
 		};
 
 		const { data } = await apiRequest.call(this, 'POST', '/api/workspace/n8n-webhooks/create', body);
